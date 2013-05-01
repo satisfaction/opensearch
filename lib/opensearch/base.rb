@@ -38,21 +38,29 @@ module OpenSearch
     def get_content(uri)
       uri =  URI.parse(uri)
       Net::HTTP.version_1_2
-      Net::HTTP.start(uri.host, uri.port) do |http|
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == "https"  # enable SSL/TLS
+        http.use_ssl = true
+      end
+      http.start {
         response = http.get("#{uri.path}?#{uri.query}")
         raise "Get Error : #{response.code} - #{response.message}" unless response.code == "200"
         response.body
-      end
+      }
     end
 
     def post_content(uri, data)
       uri =  URI.parse(uri)
       Net::HTTP.version_1_2
-      Net::HTTP.start(uri.host, uri.port) do |http|
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == "https"  # enable SSL/TLS
+        http.use_ssl = true
+      end
+      http.start {
         response = http.get("#{uri.path}?#{uri.query}", data)
         raise "Post Error : #{response.code} - #{response.message}" unless response.code == "200"
         response.body
-      end
+      }
     end
 
     def parse_rss(rss)
