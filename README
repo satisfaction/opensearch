@@ -1,0 +1,31 @@
+= OpenSearch
+
+Ruby/OpenSearch - Search A9 OpenSearch compatible engines
+
+OpenSearch is simple format of sharing of search results by A9. See http://opensearch.a9.com/ for detail.
+
+This library is for OpenSearch version 1.0 or 1.1
+
+== Usage
+
+ require 'rubygems'
+ require 'opensearch'
+
+ # initialize
+ engine = OpenSearch::OpenSearch.new "http://search.hatena.ne.jp/osxml"
+
+ # get information of  Description Document 
+ name = engine.short_name 
+ tags = engine.tags
+
+ # search (retrun value is RSS::Rss)
+ feed = engine.search("some text")
+
+ # OpenSearch Version 1.1
+ feed = engine.search("some text", "type") # type is like "application/rss+xml"
+ 
+== Author 
+-  drawnboy ( http://nowherenear.net ) <drawn.boy@gmail.com.nospam> 
+
+== License
+- Same as Ruby.
