@@ -1,5 +1,5 @@
 require 'uri'
-require 'net/http'
+require 'net/https'
 require 'rexml/document'
 require "rss/1.0"
 require "rss/2.0"
