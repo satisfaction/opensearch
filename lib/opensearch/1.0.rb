@@ -18,7 +18,6 @@ module OpenSearch
     def search(query)
       url =  @description["url"] 
       rss = super(url, query)
-      parse_rss(rss)
     end
 
     private

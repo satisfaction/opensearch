@@ -1,9 +1,6 @@
 require 'uri'
 require 'net/https'
 require 'rexml/document'
-require "rss/1.0"
-require "rss/2.0"
-require "rss/dublincore"
 
 module OpenSearch
   class OpenSearchBase
@@ -61,14 +58,6 @@ module OpenSearch
         raise "Post Error : #{response.code} - #{response.message}" unless response.code == "200"
         response.body
       }
-    end
-
-    def parse_rss(rss)
-      begin
-        RSS::Parser.parse(rss)
-      rescue RSS::InvalidRSSError
-        RSS::Parser.parse(rss, false)
-      end
     end
 
     ## No implementation of atom format parser, not yet...
