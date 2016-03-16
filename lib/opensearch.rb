@@ -37,6 +37,7 @@ module OpenSearch
         http = Net::HTTP.new(uri.host, uri.port)
         if uri.scheme == "https"  # enable SSL/TLS
           http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
         content = http.start {
           response = http.get(uri.path)

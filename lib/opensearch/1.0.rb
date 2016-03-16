@@ -15,9 +15,9 @@ module OpenSearch
       super
     end
 
-    def search(query)
+    def search(query, api_key)
       url =  @description["url"] 
-      rss = super(url, query)
+      rss = super(url, query, api_key)
     end
 
     private

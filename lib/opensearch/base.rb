@@ -10,9 +10,9 @@ module OpenSearch
       self
     end
 
-    def search(url, query, post = false)
+    def search(url, query, api_key = nil, post = false)
       query = setup_query(url, query)
-      post ? post_content(query, post) : get_content(query)
+      post ? post_content(query, post, api_key) : get_content(query, api_key)
     end
 
     private
@@ -32,26 +32,36 @@ module OpenSearch
       url
     end
 
-    def get_content(uri)
+    def get_content(uri, api_key = nil)
       uri =  URI.parse(uri)
       Net::HTTP.version_1_2
+
+      req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}")
+      req['X-ApiKey'] = api_key if api_key
+
       http = Net::HTTP.new(uri.host, uri.port)
       if uri.scheme == "https"  # enable SSL/TLS
         http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
       http.start {
-        response = http.get("#{uri.path}?#{uri.query}")
+        response = http.request(req)
         raise "Get Error : #{response.code} - #{response.message}" unless response.code == "200"
         response.body
       }
     end
 
-    def post_content(uri, data)
+    def post_content(uri, data, api_key = nil)
       uri =  URI.parse(uri)
       Net::HTTP.version_1_2
+
+      req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}", data)
+      req['X-ApiKey'] = api_key if api_key
+
       http = Net::HTTP.new(uri.host, uri.port)
       if uri.scheme == "https"  # enable SSL/TLS
         http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
       http.start {
         response = http.get("#{uri.path}?#{uri.query}", data)
