@@ -31,7 +31,20 @@ module OpenSearch
 
       private
       def fetch_description(url)
-        content = open(url) {|f| content = f.read }
+        # content = open(url) {|f| content = f.read }
+        # Skip ssl verification
+        uri =  URI.parse(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == "https"  # enable SSL/TLS
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        content = http.start {
+          response = http.get(uri.path)
+          raise "Get Error : #{response.code} - #{response.message}" unless response.code == "200"
+          response.body
+        }
+        
         doc = REXML::Document.new content
         ns_uri = nil
         REXML::XPath.each(doc, "//Format") do |node|
