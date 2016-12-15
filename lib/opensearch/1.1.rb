@@ -34,7 +34,7 @@ module OpenSearch
       super
     end
 
-    def search(query, type = nil, api_key = nil)
+    def search(query, type = nil, api_key = nil, authtoken = nil)
       url  = nil
       post = false
       if type.nil?
@@ -51,7 +51,7 @@ module OpenSearch
         end
       end
       raise "cannot find strict url from Description." if url.nil?
-      super(url, query, api_key, post)
+      super(url, query, api_key, post, authtoken)
     end
 
     private
